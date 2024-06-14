@@ -1,0 +1,1 @@
+SELECT * FROM projetoa3.solicitar_servico;
