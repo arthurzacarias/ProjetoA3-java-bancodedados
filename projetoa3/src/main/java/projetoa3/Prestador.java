@@ -69,6 +69,13 @@ public class Prestador {
 	public void setCarga_horaria(String carga_horaria) {
 		this.carga_horaria = carga_horaria;
 	}
+	
+	public String toString() {
+        return "Prestador{" +
+                ", nome='" + nomeprestador + '\'' +
+                ", cpf='" + cpfprestador + '\'' +
+                '}';
+    }
 
 	
 	

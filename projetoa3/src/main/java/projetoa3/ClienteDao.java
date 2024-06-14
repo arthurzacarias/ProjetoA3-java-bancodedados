@@ -2,10 +2,10 @@ package projetoa3;
 
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
 
 public class ClienteDao {
 	public void inserir (Cliente cliente){
@@ -80,63 +80,126 @@ public class ClienteDao {
 		}
 	}
 	
-	public Cliente buscarClientePorId(String idcliente) {
+	public Cliente buscarClientePorId(String idCliente) {
 	    String sql = "SELECT * FROM cliente WHERE idcliente = ?;";
-	    String nome = "";
-	    String cpf = "";
-	    // 2: Abrir uma conexão
+	    Cliente cliente = null;
+
 	    ConnectionFactory factory = new ConnectionFactory();
 	    try (Connection c = factory.obtemConexao()) {
-	        // 3: Pré-compila o comando
 	        PreparedStatement ps = c.prepareStatement(sql);
-	        // 4: Preenche os dados faltantes
-	        ps.setString(1, idcliente);
-	        // 5: Executa o comando e guarda o resultado em um ResultSet
-	        ResultSet rs = ps.executeQuery();
-	        rs.next();
-	        nome = rs.getString("nome");
-	        cpf = rs.getString("cpf");
-	        
+	        ps.setString(1, idCliente);
+
+	        try (ResultSet rs = ps.executeQuery()) {
+	            if (rs.next()) {
+	                String nome = rs.getString("nome");
+	                String cpf = rs.getString("cpf");
+	                
+	                // Debugging: Log the values retrieved from the database
+	                System.out.println("Cliente: " + "\n" +
+	                "Nome: " + nome + "\n" +
+	                "Cpf: " + cpf );
+	                
+	                
+	                if (nome == null) {
+	                    nome = ""; // Evita que o nome seja null
+	                }
+	                cliente = new Cliente(nome, cpf);
+	                cliente.setIdcliente(idCliente);
+	            } else {
+	                // Debugging: Log if no result was found
+	                System.out.println("Nenhum cliente encontrado com o id: " + idCliente);
+	            }
+	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
 
-	    Cliente pessoa = new Cliente(nome, cpf);
-	    pessoa.setIdcliente(idcliente);
-	    return pessoa;
+	    return cliente;
 	}
 
+	public Prestador buscarPrestadorPorId(String idprestador) {
+	    String sql = "SELECT * FROM prestador WHERE idprestador = ?;";
+	    Prestador prestador = null;
 
+	    ConnectionFactory factory = new ConnectionFactory();
+	    try (Connection c = factory.obtemConexao()) {
+	        PreparedStatement ps = c.prepareStatement(sql);
+	        ps.setString(1, idprestador);
 
-    public Prestador buscarPrestadorPorId(int idprestador) throws SQLException {
-        String sql = "SELECT nome, cpf FROM prestador WHERE idprestador = ?";
-        ConnectionFactory factory = new ConnectionFactory();
-        try (Connection c = factory.obtemConexao()) {
-            PreparedStatement stmt = c.prepareStatement(sql);
-            stmt.setInt(1, idprestador);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new Prestador(rs.getString("nome"), rs.getString("cpf"));
-            }
-        }
-        return null;
-    }
+	        try (ResultSet rs = ps.executeQuery()) {
+	            if (rs.next()) {
+	                String nome = rs.getString("nome");
+	                String cpf = rs.getString("cpf");
+	                
+	                // Debugging: Log the values retrieved from the database
+	                System.out.println(
+	                		"---------------------------------------------" + "\n" +
+	                		"Prestador: " + "\n" +
+	    	                "Nome: " + nome + "\n" +
+	    	                "Cpf: " + cpf );
+	                
+	                if (nome == null) {
+	                    nome = ""; // Evita que o nome seja null
+	                }
+	                prestador = new Prestador(nome, cpf);
+	                prestador.setIdprestador(idprestador);
+	            } else {
+	                // Debugging: Log if no result was found
+	                System.out.println("Nenhum cliente encontrado com o id: " + idprestador);
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 
-    public Solicitar_servico buscarServicoPorId(int idsolicitacao) throws SQLException {
-        String sql = "SELECT tipo_de_trabalho, localizacao, valor_mao_de_obra, valor_materiais, valor_total FROM solicitar_servico WHERE idsolicitacao = ?";
-        ConnectionFactory factory = new ConnectionFactory();
-        try (Connection c = factory.obtemConexao()) {
-            PreparedStatement stmt = c.prepareStatement(sql);
-            stmt.setInt(1, idsolicitacao);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new Solicitar_servico(rs.getString("tipo_de_trabalho"), rs.getString("localizacao"),
-                        rs.getString("valor_mao_de_obra"), rs.getString("valor_materiais"),
-                        rs.getString("valor_total"));
-            }
-        }
-        return null;
-    }
-	
-	
+	    return prestador;
+	}
+     
+    public Solicitar_servico buscarServicoPorId(String idsolicitacao) {
+    	String sql = "SELECT * FROM solicitar_servico WHERE idsolicitacao = ?;";
+	    Solicitar_servico solicitar_servico = null;
+
+	    ConnectionFactory factory = new ConnectionFactory();
+	    try (Connection c = factory.obtemConexao()) {
+	        PreparedStatement ps = c.prepareStatement(sql);
+	        ps.setString(1, idsolicitacao);
+
+	        try (ResultSet rs = ps.executeQuery()) {
+	            if (rs.next()) {
+	                String tipo_de_trabalho = rs.getString("tipo_de_trabalho");
+	                String localizacao = rs.getString("localizacao");
+	                String valor_mao_de_obra = rs.getString("valor_mao_de_obra");
+	                String valor_materiais = rs.getString("valor_materiais");
+	                String valor_total = rs.getString("valor_total");
+	                
+	                // Debugging: Log the values retrieved from the database
+	              
+	                System.out.println(
+	                		"---------------------------------------------" + "\n" +
+	                		"Serviço: " + "\n" +
+	    	                "Tipo de trabalho: " + tipo_de_trabalho + "\n" +
+	    	                "Endereço: " + localizacao + "\n" +
+	    	                "Valor Mão de Obra: " + valor_mao_de_obra + "\n" +
+	    	                "Valor dos materiais: " + valor_materiais + "\n" +
+	    	                "Valor total: " + valor_total 
+	    	                );
+	                
+	                
+	                if (tipo_de_trabalho == null) {
+	                	tipo_de_trabalho = ""; // Evita que o nome seja null
+	                }
+	                solicitar_servico = new Solicitar_servico(tipo_de_trabalho, localizacao, valor_mao_de_obra, valor_materiais, valor_total);
+	                solicitar_servico.setIdsolicitacao(idsolicitacao);
+	            } else {
+	                // Debugging: Log if no result was found
+	                System.out.println("Nenhum cliente encontrado com o id: " + idsolicitacao);
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return solicitar_servico;
+	}
+    
 }

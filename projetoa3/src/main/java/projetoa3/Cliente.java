@@ -71,6 +71,13 @@ public class Cliente {
 	public void setEndereco(String endereco) {
 		this.endereco = endereco;
 	}
+	
+	public String toString() {
+        return "Cliente{" +
+                ", nome='" + nome + '\'' +
+                ", cpf='" + cpf + '\'' +
+                '}';
+    }
 
 
 	

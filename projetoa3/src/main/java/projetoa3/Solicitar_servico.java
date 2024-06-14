@@ -88,6 +88,16 @@ public class Solicitar_servico {
 		this.valor_total = valor_total;
 	}
 	
+	public String toString() {
+        return "Solicitar_servico{" +
+                ", tipoDeTrabalho='" + tipo_de_trabalho + '\'' +
+                ", localizacao='" + localizacao + '\'' +
+                ", valorMaoDeObra='" + valor_mao_de_obra + '\'' +
+                ", valorMateriais='" + valor_materiais + '\'' +
+                ", valorTotal='" + valor_total + '\'' +
+                '}';
+    }
+	
 	
 	
 	
